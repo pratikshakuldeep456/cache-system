@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"pratikshakuldeep456/cache-system/pkg"
 	"strings"
 
 	"github.com/urfave/cli/v2"
@@ -28,10 +29,7 @@ func StartCacheSystem(ctx *cli.Context) error {
 		return err
 	}
 
-	limit := 10
-	fmt.Println("input is", input, "and limit is ", limit)
-
-	//cache limit
+	fmt.Println("input is", input)
 
 	fmt.Println("enter key:value to store in cache")
 
@@ -45,20 +43,16 @@ func StartCacheSystem(ctx *cli.Context) error {
 
 	parts := strings.Split(keyValue, ":")
 	fmt.Println(parts)
-	// write
-	//get
-	//implement cache limit
 
-	myMap := make(map[string]int)
-	myMap[parts[0]] = myMap[parts[1]]
-
-	//compare map size with limit
-
-	if len(myMap) > limit {
-		//call choosen algo of cache policy
-
-		//lfu lru howw??
+	var evictAlgo pkg.EvictionAlgo
+	switch input {
+	case "1":
+		evictAlgo = &pkg.LRU{}
+	case "2":
+		evictAlgo = &pkg.LFU{}
 	}
+	cache := pkg.InitCache(evictAlgo)
+	cache.AddCache(parts[1], parts[0])
 
 	return nil
 }

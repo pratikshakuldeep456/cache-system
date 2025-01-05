@@ -17,7 +17,7 @@ func (l *LFU) evict(c *Cache) {
 }
 
 type Cache struct {
-	storage     map[string]int
+	storage     map[string]string
 	algo        EvictionAlgo
 	capacity    int
 	maxCapacity int
@@ -28,7 +28,7 @@ type EvictionAlgo interface {
 
 func InitCache(e EvictionAlgo) *Cache {
 	return &Cache{
-		storage:     make(map[string]int),
+		storage:     make(map[string]string),
 		algo:        e,
 		capacity:    0,
 		maxCapacity: 10,
@@ -39,7 +39,7 @@ func (c *Cache) SetCacheAlgo(e EvictionAlgo) {
 	c.algo = e
 }
 
-func (c *Cache) AddCache(value int, key string) {
+func (c *Cache) AddCache(value string, key string) {
 	if c.capacity == c.maxCapacity {
 		c.algo.evict(c)
 	}
