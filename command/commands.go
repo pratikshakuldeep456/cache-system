@@ -31,19 +31,6 @@ func StartCacheSystem(ctx *cli.Context) error {
 
 	fmt.Println("input is", input)
 
-	fmt.Println("enter key:value to store in cache")
-
-	keyValue, err := reader.ReadString('\n')
-	keyValue = keyValue[:(len(keyValue) - 1)]
-
-	if err != nil {
-		fmt.Println(err)
-		return err
-	}
-
-	parts := strings.Split(keyValue, ":")
-	fmt.Println(parts)
-
 	var evictAlgo pkg.EvictionAlgo
 	switch input {
 	case "1":
@@ -52,7 +39,41 @@ func StartCacheSystem(ctx *cli.Context) error {
 		evictAlgo = &pkg.LFU{}
 	}
 	cache := pkg.InitCache(evictAlgo)
-	cache.AddCache(parts[1], parts[0])
 
-	return nil
+	for {
+
+		fmt.Println("enter command put/get")
+		cmd, _ := reader.ReadString('\n')
+		cmd = strings.TrimSpace(cmd)
+
+		switch cmd {
+		case "put":
+
+			fmt.Println("enter key:value to store in cache")
+
+			keyValue, err := reader.ReadString('\n')
+			keyValue = keyValue[:(len(keyValue) - 1)]
+
+			if err != nil {
+				fmt.Println(err)
+				return err
+			}
+
+			parts := strings.Split(keyValue, ":")
+			fmt.Println(parts)
+
+			cache.Put(parts[0], parts[1])
+
+		case "get":
+			fmt.Println("enter key to get value")
+
+			key, _ := reader.ReadString('\n')
+			key = strings.TrimSpace(key)
+			value := cache.Get(key)
+			fmt.Println(" cache value is ", value)
+
+		}
+	}
+
+	//return nil
 }
