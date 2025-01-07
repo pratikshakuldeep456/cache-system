@@ -39,7 +39,7 @@ func StartCacheSystem(ctx *cli.Context) error {
 		evictAlgo = &pkg.LFU{}
 	}
 	cache := pkg.InitCache(evictAlgo)
-
+	fmt.Println("cache is ", cache)
 	for {
 
 		fmt.Println("enter command put/get")

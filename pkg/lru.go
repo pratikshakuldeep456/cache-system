@@ -16,6 +16,7 @@ func (l *LRU) evict(c *Cache) {
 	l.usageOrder = l.usageOrder[1:]
 	delete(c.storage, firstKey)
 	c.capacity--
+	//fmt.Println("storage is ", c.storage)
 
 }
 

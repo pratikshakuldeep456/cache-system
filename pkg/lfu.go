@@ -24,14 +24,24 @@ func (l *LFU) evict(c *Cache) {
 		}
 	}
 	delete(c.storage, freq)
-	delete(l.countMap, freq)
-	c.capacity--
 
+	c.capacity--
+	l.countMap[freq]--
 	fmt.Println(" lfu evicted key is ", freq)
+	fmt.Println(" lfu storage is ", l.countMap)
 
 }
 
 func (l *LFU) AddCache(key string) {
-	l.countMap[key]++
+	if l.countMap == nil {
+		l.countMap = make(map[string]int)
+	}
+	fmt.Println("djifodf")
+	if _, j := l.countMap[key]; j {
+		l.countMap[key]++
+
+	} else {
+		l.countMap[key] = 1
+	}
 
 }
